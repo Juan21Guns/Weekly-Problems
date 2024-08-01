@@ -1,29 +1,56 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
   const [value, setValue] = useState("")
+  const [word, setWord] = useState("");
+
+  let words = [];
 
   const handleChange = (e) => {
     setValue(e.target.value);
+    
+    if (value.length <= 5) {
+      setWord(e.target.value);
+    }
   }
+
+  useEffect(() => {
+    const str = word.split("");
+    for (let i = 0; i < 5; i++) {
+      const node = document.getElementById(`f${words.length}${i + 1}`);
+    
+      if (node.firstChild) {
+        node.removeChild(node.firstChild);
+      }
+
+      if (str[i]) {
+        const newLetter = document.createTextNode(str[i]);
+        node.appendChild(newLetter);
+      }
+    }
+  }, [word])
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(value);
+    
+    if (value.length == 5) {
+      words.push(value);
+      console.log(words);
+    }
   }
 
   return (
     <>
       <div className="wrapper">
         <div className="obor">
-            <div className="box" id="f01">e</div>
-            <div className="box" id="f02">a</div>
-            <div className="box" id="f03">r</div>
-            <div className="box" id="f04">t</div>
-            <div className="box" id="f05">h</div>
+            <div className="box" id="f01"></div>
+            <div className="box" id="f02"></div>
+            <div className="box" id="f03"></div>
+            <div className="box" id="f04"></div>
+            <div className="box" id="f05"></div>
 
             <div className="box" id="f11"></div>
             <div className="box" id="f12"></div>
@@ -58,7 +85,7 @@ function App() {
       </div>
 
       <form id="keyboard" onSubmit={handleSubmit}>
-        <input type="text" value={value} onChange={handleChange}/>
+        <input type="text" maxLength="5" value={value} onChange={handleChange}/>
         <button type="submit"/>
       </form>
     </>
