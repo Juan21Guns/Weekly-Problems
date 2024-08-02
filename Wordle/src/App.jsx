@@ -7,7 +7,7 @@ function App() {
   const [value, setValue] = useState("")
   const [word, setWord] = useState("");
 
-  let words = [];
+  const [words, setWords] = useState([]);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -33,12 +33,23 @@ function App() {
     }
   }, [word])
 
+  useEffect(() => {
+    console.log(words);
+    if (words.length >= 6) {
+      const keyboard = document.getElementById("keyboard");
+      keyboard.remove();
+    }
+  }, [words])
+
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (value.length == 5) {
-      words.push(value);
-      console.log(words);
+    if (value.length == 5 && words.length <= 5) {
+      const newWords = [...words];
+
+      newWords.push(value);
+      setWords(newWords);
+      setValue("");
     }
   }
 
